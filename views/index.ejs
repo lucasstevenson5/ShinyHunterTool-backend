@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css" />
+    <style>
+        body {background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/04a2954f-5e4e-40a7-8317-ab54e83b3d0b/da9huv8-c1ce8999-0318-43c0-944b-09d90437843f.png/v1/fill/w_1024,h_576,q_75,strp/lucario_wallpaper_by_pennymester-da9huv8.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwic3ViIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl0sIm9iaiI6W1t7InBhdGgiOiIvZi8wNGEyOTU0Zi01ZTRlLTQwYTctODMxNy1hYjU0ZTgzYjNkMGIvZGE5aHV2OC1jMWNlODk5OS0wMzE4LTQzYzAtOTQ0Yi0wOWQ5MDQzNzg0M2YucG5nIiwid2lkdGgiOiI8PTEwMjQiLCJoZWlnaHQiOiI8PTU3NiJ9XV19.S4mMYi6M254JI_feqOSGVp_BPM4W_AlfWAt9qpLv8nA");}
+    </style>
+</head>
+<body>
+    <h1>Pokemon Caught</h1>
+
+
+    <ul class="pokemon">
+        <% for(let i = 0; i < pokemon.length; i++) { %>
+            <li>
+                <a href="/pokemon/<%= pokemon[i].id %>"> <%= pokemon[i].name %> </a><br><br>
+            </li>
+        <% } %>
+        <br><br><br>
+    </ul>
+    <form action="/pokemon" method="POST">
+        Name: <input type="text" name="name" /><br><br>
+        <label for="types">Type:</label>
+        <select name="type" id="types">
+            <option value="Bug">Bug</option>
+            <option value="Dark">Dark</option>
+            <option value="Dragon">Dragon</option>
+            <option value="Electric">Electric</option>
+            <option value="Fairy">Fairy</option>
+            <option value="Fighting">Fighting</option>
+            <option value="Fire">Fire</option>
+            <option value="Flying">Flying</option>
+            <option value="Ghost">Ghost</option>
+            <option value="Grass">Grass</option>
+            <option value="Ground">Ground</option>
+            <option value="Ice">Ice</option>
+            <option value="Normal">Normal</option>
+            <option value="Poison">Poison</option>
+            <option value="Psychic">Psychic</option>
+            <option value="Rock">Rock</option>
+            <option value="Steel">Steel</option>
+            <option value="Water">Water</option>
+        </select><br><br>
+        <input type="submit" value="Catch Pokemon">
+    </form><br><br>
+</body>
+</html>

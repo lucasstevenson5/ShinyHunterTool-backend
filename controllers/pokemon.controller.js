@@ -2,7 +2,7 @@ const db = require("../models");
 const Pokemon = db.pokemon;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Tutorial
+// Create and Save a new Pokemon
 exports.create = (req, res) => {
   if (!req.body.name) {
     res.status(400).send({
@@ -17,8 +17,8 @@ exports.create = (req, res) => {
   };
 
   Pokemon.create(pokemon)
-    .then(data => {
-        res.send(data)
+    .then(newPokemon => {
+        res.redirect("/pokemon")
     })
     .catch(err => {
         res.status(500).send({
@@ -28,14 +28,21 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all Tutorials from the database.
+// Retrieve all Pokemon from the database.
 exports.findAll = (req, res) => {
   const name = req.query.name;
   var condition = name ? { name: { [Op.iLike]: `%${name}` } } : null;
 
-  Pokemon.findAll({ where: condition})
+  Pokemon.findAll({ 
+    //where: condition,
+    order: [
+        ['id', 'ASC']
+    ]
+  })
     .then(data => {
-        res.send(data);
+        res.render("index.ejs", {
+            pokemon: data
+        });
     })
     .catch(err => {
         res.status(500).send({
@@ -45,14 +52,14 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single Tutorial with an id
+// Find a single Pokemon with an id
 exports.findOne = (req, res) => {
-  const id = req.params.id;
-
-  Pokemon.findByPk(id)
-    .then(data => {
-        if (data) {
-            res.send(data);
+  Pokemon.findByPk(req.params.id)
+    .then(showPokemon => {
+        if (showPokemon) {
+            res.render("show.ejs", {
+                pokemon: showPokemon
+            })
         } else {
             res.status(404).send({
                 message: `Cannot find Pokemon with id=${id}.`
@@ -66,7 +73,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a Tutorial by the id in the request
+// Update a Pokemon by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
@@ -75,9 +82,7 @@ exports.update = (req, res) => {
   })
     .then(num => {
         if (num == 1) {
-            res.send({
-                message: "Pokemon was updated successfully."
-            });
+            res.redirect(`/pokemon/${id}`);
         } else {
             res.send({
                 message: `Cannot update Pokemon with id=${id}.`
@@ -91,19 +96,17 @@ exports.update = (req, res) => {
     })
 };
 
-// Delete a Tutorial with the specified id in the request
+// Delete a Pokemon with the specified id in the request
 exports.delete = (req, res) => {
-  const id = req.params.id;
-
   Pokemon.destroy({
-    where: { id: id }
+    where: { id: req.params.id }
   })
     .then(num => {
         if (num == 1) {
-            res.send({
-                message: "Pokemon was deleted successfully"
-            });
+            console.log("here")
+            res.redirect("/pokemon");
         } else {
+            console.log("there")
             res.send({
                 message: `Cannot delete Pokemon with id=${id}.`
             });
@@ -114,17 +117,4 @@ exports.delete = (req, res) => {
             message: `Error deleting Pokemon with id=${id}.`
         });
     });
-};
-
-// Delete all Tutorials from the database.
-exports.deleteAll = (req, res) => {
-  Pokemon.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-        res.send({
-            message: `${nums} Pokemon were deleted successfully`
-        })
-    })
 };
