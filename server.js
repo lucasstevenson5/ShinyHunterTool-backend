@@ -5,13 +5,18 @@ const cors = require("cors");
 const app = express();
 
 const db = require("./models");
-db.sequelize.sync()
+
+/*db.sequelize.sync()
   .then(() => {
     console.log("Synced db.");
   })
   .catch((err) => {
     console.log("Failed to sync db: " + err.message);
   });
+*/
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+});
 
 var corsOptions = {
   origin: "http://localhost:8081"
@@ -31,6 +36,7 @@ app.get("/", (req, res) => {
 });
 
 require("./routes/pokemon.routes")(app);
+require("./routes/pokedex.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
