@@ -3,8 +3,9 @@ const Pokedex = db.pokedex;
 const Op = db.Sequelize.Op;
 const axios = require('axios');
 var fullPokedex = [];
+var backendPokedex = [];
 
-// Create and Save a new Pokemon
+// Create and Save all pokemon exported from external API
 exports.create = (req, res) => {
   /*if (!req.body.name) {
     res.status(400).send({
@@ -15,27 +16,29 @@ exports.create = (req, res) => {
 
   console.log(fullPokedex);
   for (let i=0; i < fullPokedex.length; i++) {
-    const pokedex = {
-        name: fullPokedex[i].name
-    };
+    
+        console.log(backendPokedex[i].data);
+        const pokedex = {
+            name: backendPokedex[i].data.name
+        };
 
-    Pokedex.create(pokedex)
-        .then(newPokedex => {
-            
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Pokemon"
+        Pokedex.create(pokedex)
+            .then(newPokedex => {
+                
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while creating the Pokemon"
+                });
             });
-        });
   }
+  res.redirect("../pokedex")
   
 }; 
 
-// Retrieve all Pokemon from the database.
+// Retrieve all Pokemon from the external api and store to variable.
 exports.findAll = (req, res) => {
-  console.log(req.body);
   const url = "https://pokeapi.co/api/v2/pokemon?limit=10&offset=0";
 
   axios.get(url)
@@ -44,7 +47,13 @@ exports.findAll = (req, res) => {
             pokedex: pokedex
         });
         fullPokedex = pokedex.data.results;
-        console.log(fullPokedex);
+
+        for (let i=0; i < fullPokedex.length; i++) {
+            axios.get(fullPokedex[i].url)
+                .then(pokemon => {
+                    backendPokedex[i] = pokemon;
+                })
+        }
     })
     .catch(err => {
         res.status(500).send({
@@ -52,4 +61,25 @@ exports.findAll = (req, res) => {
                 err.message || "Some error occurred while retrieving pokemon"
         });
     });
+};
+
+exports.findAllPokemon = (req, res) => {
+
+    Pokedex.findAll({ 
+        //where: condition,
+        order: [
+            ['id', 'ASC']
+        ]
+    })
+        .then(data => {
+            res.render("showPokedex.ejs", {
+                pokemon: data
+            });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving pokemon"
+            });
+        });
 };

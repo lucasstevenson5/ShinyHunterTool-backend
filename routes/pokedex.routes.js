@@ -11,6 +11,8 @@ module.exports = app => {
     // Retrieve all Pokemon for one time migration to Pokedex backend
     router.get("/migrate", pokedex.findAll);
 
+    router.get("/", pokedex.findAllPokemon)
+
     // Retrieve a single Pokemon with id
     // router.get("/:id", pokemon.findOne);
 
