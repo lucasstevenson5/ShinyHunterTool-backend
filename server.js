@@ -6,6 +6,9 @@ const app = express();
 
 const db = require("./models");
 
+//var testAPIRouter = require("./routes/testAPI");
+//app.use("/testAPI", testAPIRouter);
+
 /*db.sequelize.sync()
   .then(() => {
     console.log("Synced db.");
@@ -19,7 +22,9 @@ db.sequelize.sync({ force: true }).then(() => {
 });
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
@@ -37,6 +42,8 @@ app.get("/", (req, res) => {
 
 require("./routes/pokemon.routes")(app);
 require("./routes/pokedex.routes")(app);
+require("./routes/testAPI")(app);
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

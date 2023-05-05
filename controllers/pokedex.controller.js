@@ -17,9 +17,13 @@ exports.create = (req, res) => {
   console.log(fullPokedex);
   for (let i=0; i < fullPokedex.length; i++) {
     
-        console.log(backendPokedex[i].data);
+        console.log(backendPokedex[i].data.stats);
         const pokedex = {
-            name: backendPokedex[i].data.name
+            name: backendPokedex[i].data.name,
+            img: backendPokedex[i].data.sprites.front_shiny,
+            type: backendPokedex[i].data.types[0].type.name,
+            //stats: backendPokedex[i].data.stats,
+            primaryAbility: backendPokedex[i].data.abilities[0].ability.name
         };
 
         Pokedex.create(pokedex)
@@ -33,7 +37,7 @@ exports.create = (req, res) => {
                 });
             });
   }
-  res.redirect("../pokedex")
+  res.redirect("../pokemon")
   
 }; 
 
@@ -72,9 +76,8 @@ exports.findAllPokemon = (req, res) => {
         ]
     })
         .then(data => {
-            res.render("showPokedex.ejs", {
-                pokemon: data
-            });
+            console.log(data[1].dataValues)
+            res.send(data);
         })
         .catch(err => {
             res.status(500).send({
