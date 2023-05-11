@@ -1,16 +1,17 @@
 const { Model } = require('sequelize');
+const Pokemon = require('./pokedex.model');
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
     class User extends Model {
         static associate(models) {
-            User.hasMany(models.Pokemon, { foreignKey: "userId" })
+            User.hasMany(models.pokemon, { foreignKey: "userId" })
         }
     };
 
     User.init({
-        name: Sequelize.STRING,
-        username: Sequelize.STRING,
-        password: Sequelize.STRING
+        name: DataTypes.STRING,
+        username: DataTypes.STRING,
+        password: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'user'

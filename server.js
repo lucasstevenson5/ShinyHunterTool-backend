@@ -19,6 +19,7 @@ const db = require("./models");
 */
 db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
+  useRoutes()
 });
 
 var corsOptions = {
@@ -40,10 +41,13 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Shiny Hunter application." });
 });
 
-require("./routes/pokemon.routes")(app);
-require("./routes/pokedex.routes")(app);
-require("./routes/user.routes")(app);
-require("./routes/testAPI")(app);
+function useRoutes() {
+  require("./routes/pokemon.routes")(app);
+  require("./routes/pokedex.routes")(app);
+  require("./routes/user.routes")(app);
+  require("./routes/testAPI")(app);
+}
+
 
 
 // set port, listen for requests

@@ -2,23 +2,25 @@ const db = require("../models");
 const Pokemon = db.pokemon;
 const Op = db.Sequelize.Op;
 
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+
 // Create and Save a new Pokemon
 exports.create = (req, res) => {
-  if (!req.body.name) {
-    res.status(400).send({
-        message: "Content can not be empty!"
-    });
-    return;
-  }
-
+  var cookie = req.headers.cookie
+  cookie = cookie.slice(4);
+  console.log(cookie)
+  var decoded = jwt.verify(cookie, process.env.JWT_KEY);
+  req.body.userId = decoded.id
   const pokemon = {
     name: req.body.name,
-    type: req.body.type
+    type: req.body.type,
+    userId: req.body.userId
   };
 
   Pokemon.create(pokemon)
     .then(newPokemon => {
-        res.redirect("/pokemon")
+        res.redirect("/user/profile")
     })
     .catch(err => {
         res.status(500).send({

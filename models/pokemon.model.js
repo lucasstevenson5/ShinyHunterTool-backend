@@ -1,17 +1,18 @@
 const { Model } = require('sequelize');
+const User = require('./user.model')
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
     class Pokemon extends Model {
       static associate(models) {
-        Pokemon.belongsTo(models.User, {
-          foreignKey: "userId"
-        })
-      }
+        console.log(models)
+        Pokemon.belongsTo(models.user, { foreignKey: "userId" });
+      };
     };
 
     Pokemon.init({
-      name: Sequelize.STRING,
-      type: Sequelize.STRING
+      name: DataTypes.STRING,
+      type: DataTypes.STRING,
+      userId: DataTypes.INTEGER
     }, {
       sequelize,
       modelName: "pokemon"
