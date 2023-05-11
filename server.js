@@ -42,6 +42,7 @@ app.get("/", (req, res) => {
 
 require("./routes/pokemon.routes")(app);
 require("./routes/pokedex.routes")(app);
+require("./routes/user.routes")(app);
 require("./routes/testAPI")(app);
 
 

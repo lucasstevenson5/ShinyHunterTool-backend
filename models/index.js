@@ -21,5 +21,6 @@ db.sequelize = sequelize;
 
 db.pokemon = require("./pokemon.model.js")(sequelize, Sequelize);
 db.pokedex = require("./pokedex.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
 
 module.exports = db;

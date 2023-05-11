@@ -1,5 +1,23 @@
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, Sequelize) => {
-    const Pokemon = sequelize.define("pokemon", {
+    class Pokemon extends Model {
+      static associate(models) {
+        Pokemon.belongsTo(models.User, {
+          foreignKey: "userId"
+        })
+      }
+    };
+
+    Pokemon.init({
+      name: Sequelize.STRING,
+      type: Sequelize.STRING
+    }, {
+      sequelize,
+      modelName: "pokemon"
+    })
+
+    /*const Pokemon = sequelize.define("pokemon", {
       name: {
         type: Sequelize.STRING
       },
@@ -7,6 +25,12 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       }
     });
+
+    Pokemon.associate = function(models) {
+      Pokemon.belongsTo(models.User, {
+        foreignKey: "userId"
+      })
+    }*/
   
     return Pokemon;
   };
